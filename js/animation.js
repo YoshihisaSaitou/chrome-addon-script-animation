@@ -66,6 +66,9 @@ function runTypingAnimation(disp_obj){
         //指定箇所の文字取得
         //let char = text_test.charAt(text_position);
         let char = text_list[text_list_element].content.charAt(text_position);
+        /*if(char == "\r" || char == "\r\n"){
+            char = "\n";
+        }*/
         /*if(char == "\n" || char == "\r" || char == "\r\n"){
             char = '<br>';
         }else if(char == ' '){
@@ -117,7 +120,7 @@ var upload_file_obj = document.getElementById('upload_file');
 upload_file_obj.onchange = function(_e){
     //console.log(_e);
     //console.log(_e.target.files);
-    text_test = '';
+    //text_test = '';
     for(let i = 0;i < _e.target.files.length;i++){
         console.log(_e.target.files[i]);
         let file = _e.target.files[i];
@@ -125,10 +128,12 @@ upload_file_obj.onchange = function(_e){
         file_reader.onload = function () {
             console.log(file.name);
             //console.log(file_reader.result);
-            text_test += file_reader.result;
+            //text_test += file_reader.result;
+            let content = file_reader.result;
+            content = content.replace(/\r?\n/g, "\n");
             let file_info = {
                 'name':file.name,
-                'content':file_reader.result
+                'content':content
             };
             text_list.push(file_info);
         }
@@ -141,7 +146,7 @@ var upload_file_dir_obj = document.getElementById('upload_file_dir');
 upload_file_dir_obj.onchange = function(_e){
     //console.log(_e);
     //console.log(_e.target.files);
-    text_test = '';
+    //text_test = '';
     for(let i = 0;i < _e.target.files.length;i++){
         //console.log(_e.target.files[i]);
         let file = _e.target.files[i];
@@ -150,10 +155,12 @@ upload_file_dir_obj.onchange = function(_e){
             console.log(file.name);
             console.log(file.webkitRelativePath);
             //console.log(file_reader.result);
-            text_test += file_reader.result;
+            //text_test += file_reader.result;
+            let content = file_reader.result;
+            content = content.replace(/\r?\n/g, "\n");
             let file_info = {
                 'name':file.webkitRelativePath,
-                'content':file_reader.result
+                'content':content
             };
             text_list.push(file_info);
         }
