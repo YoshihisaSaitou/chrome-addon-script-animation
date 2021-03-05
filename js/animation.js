@@ -2,6 +2,7 @@ window.onload = function () {
 //console.log('xxxxxxxxxxxx');
 
 const documentElement = document.documentElement;
+const extension_check = new RegExp('([^\s]+(\\.(jpg|png|gif|jpeg|jpe|jfif|bmp|dib|ico|art|cam|cdr|cgm|cmp|dpx|fal|q0|fpx|j6i|mac|mag|maki|mng|pcd|pct|pic|pict|pcx|pmp|pnm|ras|sj1|tif|tiff|nsk|tga|wmf|wpg|xbm|xpm|pdf|docx|doc|xlsx|xls|ppt|pps|dcr|dir|dxr|dwt|fla|jxw|ppd|ps|eps|rtf|wri|exe|dll|com|ocx|sys|a|so|ai|psd|wave|aif|mp3|mp4|aac|flac|mid|midi|aif|aiff|aifc|au|snd|mov|qt|mpg|mpeg|wm|wma|wmv|asf|wax|wvx|asx|ra|rv|rm|ram|rmm|rpm|swf|avi|dvr-ms|scr|smi|smil|vdo|vrml|wrl|lzh|zip|cab|tar|gz|tgz|hqx|sit|Z|uu))$)', 'i');
 var text_test = 'if(true){ i=1; }';
 var text_list = [];
 var text_list_element = 0;
@@ -21,6 +22,9 @@ var key_sound_list = [
     new Audio('../../sound/key_sound_p4.mp3'),
     new Audio('../../sound/key_sound_p5.mp3'),
 ];
+var key_sound_enter = new Audio('../../sound/key_sound_enter.mp3');
+var key_sound_space = new Audio('../../sound/key_sound_space.mp3');
+var key_sound_tab = new Audio('../../sound/key_sound_tab.mp3');
 
 btn_typing_obj.addEventListener('click', function(){
     console.log('text_list', text_list);
@@ -98,11 +102,12 @@ function runTypingAnimation(disp_obj){
         //指定箇所の文字取得
         //let char = text_test.charAt(text_position);
         let char = text_list[text_list_element].content.charAt(text_position);
+        
         /*if(char == "\r" || char == "\r\n"){
             char = "\n";
         }*/
-        /*if(char == "\n" || char == "\r" || char == "\r\n"){
-            char = '<br>';
+        /*if(char == "\n"){
+            
         }else if(char == ' '){
             char = '&nbsp;';
         }else if(char == '	'){
@@ -139,14 +144,24 @@ function runTypingAnimation(disp_obj){
             
             //改行を入れる
             disp_obj.innerHTML += "\n";
+            
+            key_sound_enter.play();
         }else{
             //内容を表示中の場合は位置を増やす
             text_position++;
             
-            key_sound_list[key_sound_list_element].play();
-            key_sound_list_element++;
-            if(key_sound_list_element >= key_sound_list.length){
-                key_sound_list_element = 0;
+            if(char == "\n"){
+                key_sound_enter.play();
+            }else if(char == ' '){
+                key_sound_space.play();
+            }else if(char == '	'){
+                key_sound_tab.play();
+            }else{
+                key_sound_list[key_sound_list_element].play();
+                key_sound_list_element++;
+                if(key_sound_list_element >= key_sound_list.length){
+                    key_sound_list_element = 0;
+                }
             }
         }
         
@@ -164,13 +179,18 @@ upload_file_obj.onchange = function(_e){
         let file = _e.target.files[i];
         let file_reader = new FileReader();
         file_reader.onload = function () {
-            console.log(file.name);
+            //console.log(file.name);
             //console.log(file_reader.result);
             //text_test += file_reader.result;
+            let name = file.name;
+            if(extension_check.test(name)){
+                console.log(file.name);
+                return;
+            }
             let content = file_reader.result;
             content = content.replace(/\r?\n/g, "\n");
             let file_info = {
-                'name':file.name,
+                'name':name,
                 'content':content
             };
             text_list.push(file_info);
@@ -190,14 +210,19 @@ upload_file_dir_obj.onchange = function(_e){
         let file = _e.target.files[i];
         let file_reader = new FileReader();
         file_reader.onload = function () {
-            console.log(file.name);
-            console.log(file.webkitRelativePath);
+            //console.log(file.name);
+            //console.log(file.webkitRelativePath);
             //console.log(file_reader.result);
             //text_test += file_reader.result;
+            let name = file.webkitRelativePath;
+            if(extension_check.test(name)){
+                console.log(file.name);
+                return;
+            }
             let content = file_reader.result;
             content = content.replace(/\r?\n/g, "\n");
             let file_info = {
-                'name':file.webkitRelativePath,
+                'name':name,
                 'content':content
             };
             text_list.push(file_info);
