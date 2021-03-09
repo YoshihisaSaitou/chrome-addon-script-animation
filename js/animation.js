@@ -48,7 +48,7 @@ btn_typing_obj.addEventListener('click', function(){
     document.getElementById('text_typing').style.display = 'block';
     
     //撮影用にインターバルを設ける
-    setTimeout(runSetInterval, 1000);
+    setTimeout(runSetInterval, 5000);
     
     //interval_id = setInterval(runTypingAnimation, 1, text_typing_obj);
     //text_count++;
