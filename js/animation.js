@@ -12,7 +12,7 @@ var text_count = 0;
 var text_position = 0;
 var interval_id = 0;
 var interval_count = 0;
-var interval_timeout = 6;
+var interval_timeout = 20;//6
 //var key_sound = new Audio('../../sound/key_sound_p1.mp3');
 var key_sound_list_element = 0;
 var key_sound_list = [
@@ -54,15 +54,29 @@ btn_typing_obj.addEventListener('click', function(){
     //text_count++;
     //clearTimeout
     //setTimeout
-    /*for (var i = 0; i < text_test.length; i++) {
-        let char = text_test.charAt(i);
-        text_typing_obj.innerHTML += char;
-    }*/
+    //for (var i = 0; i < text_test.length; i++) {
+        //let char = text_test.charAt(i);
+        //text_typing_obj.innerHTML += char;
+    //}
 });
 
 //タイマー処理実行
 function runSetInterval(){
     interval_id = setInterval(runTypingAnimation, interval_timeout, text_typing_obj);
+}
+
+window.document.onkeydown = function(event){
+    console.log(event.key);
+    if(event.key == 'Enter'){
+        //エンターで一時停止と再開処理
+        console.log(interval_id);
+        if(interval_id != 0){
+            clearTimeout(interval_id);
+            interval_id = 0;
+        }else if(text_list.length > 0){
+            setTimeout(runSetInterval, 5000);
+        }
+    }
 }
 
 //タイピングアニメーション実行
@@ -95,9 +109,9 @@ function runTypingAnimation(disp_obj){
         window.scroll(0, bottom);
         
         //位置が最初の場合はファイル名を表示する
-        if(text_position == 0){
-            disp_obj.innerHTML += '$ '+text_list[text_list_element].name+"\n";
-        }
+        //if(text_position == 0){
+        //    disp_obj.innerHTML += '$ '+text_list[text_list_element].name+"\n";
+        //}
         
         //指定箇所の文字取得
         //let char = text_test.charAt(text_position);
